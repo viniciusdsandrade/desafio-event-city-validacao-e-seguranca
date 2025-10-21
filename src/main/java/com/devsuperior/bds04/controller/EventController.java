@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,12 +26,14 @@ public class EventController {
     }
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Page<EventDTO>> findAll(Pageable pageable) {
         Page<EventDTO> page = service.findAllPaged(pageable);
         return ok(page);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
     public ResponseEntity<EventDTO> insert(@Valid @RequestBody EventDTO dto) {
         EventDTO saved = service.insert(dto);
         URI uri = ServletUriComponentsBuilder

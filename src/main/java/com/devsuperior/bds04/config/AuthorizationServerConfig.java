@@ -15,10 +15,10 @@ import com.devsuperior.bds04.config.customgrant.CustomUserAuthorities;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +53,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
-@Profile("!test")
+//@Profile("!test")
 @Configuration
 public class AuthorizationServerConfig {
 
@@ -81,6 +81,7 @@ public class AuthorizationServerConfig {
 
         http
                 .securityMatcher(as.getEndpointsMatcher())
+                .csrf(AbstractHttpConfigurer::disable)
                 .with(as, authz -> authz
                         .tokenEndpoint(token -> token
                                 .accessTokenRequestConverter(new CustomPasswordAuthenticationConverter())

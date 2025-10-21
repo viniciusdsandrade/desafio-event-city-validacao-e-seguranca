@@ -31,8 +31,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDTO insert(EventDTO dto) {
         City city = cityRepository.getReferenceById(dto.getCityId());
-        Event entity = new Event(null, dto.getName(), dto.getDate(), dto.getUrl(), city);
-        entity = eventRepository.save(entity);
+        Event entity = new Event(
+                null,
+                dto.getName(),
+                dto.getDate(),
+                dto.getUrl(),
+                city
+        );
+        eventRepository.save(entity);
         return new EventDTO(entity);
     }
 }

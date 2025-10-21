@@ -4,6 +4,7 @@ import com.devsuperior.bds04.dto.CityDTO;
 import com.devsuperior.bds04.service.CityService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,12 +25,14 @@ public class CityController {
     }
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<CityDTO>> findAll() {
         List<CityDTO> list = service.findAllSortedByName();
         return ok(list);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CityDTO> insert(@Valid @RequestBody CityDTO dto) {
         CityDTO saved = service.insert(dto);
         URI uri = ServletUriComponentsBuilder
