@@ -61,7 +61,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         users.setEmail(results.getFirst().getUsername());
         users.setPassword(results.getFirst().getPassword());
         results.forEach(projection -> users.addRole(
-                new Roles(projection.getRoleId(), projection.getAuthority())
+                new Roles(
+                        projection.getRoleId(),
+                        projection.getAuthority()
+                )
         ));
         return users;
     }

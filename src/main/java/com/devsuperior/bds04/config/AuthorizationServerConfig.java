@@ -85,8 +85,13 @@ public class AuthorizationServerConfig {
                 .with(as, authz -> authz
                         .tokenEndpoint(token -> token
                                 .accessTokenRequestConverter(new CustomPasswordAuthenticationConverter())
-                                .authenticationProvider(new CustomPasswordAuthenticationProvider(
-                                        authorizationService(), tokenGenerator(), userDetailsService, passwordEncoder))
+                                .authenticationProvider(
+                                        new CustomPasswordAuthenticationProvider(
+                                                authorizationService(),
+                                                tokenGenerator(),
+                                                userDetailsService, passwordEncoder
+                                        )
+                                )
                         )
                         .oidc(Customizer.withDefaults())
                 );
@@ -154,7 +159,11 @@ public class AuthorizationServerConfig {
         return context -> {
             OAuth2ClientAuthenticationToken principal = context.getPrincipal();
             CustomUserAuthorities user = (CustomUserAuthorities) principal.getDetails();
-            List<String> authorities = user.authorities().stream().map(GrantedAuthority::getAuthority).toList();
+            List<String> authorities = user.authorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+
             if (context.getTokenType().getValue().equals("access_token")) {
                 context.getClaims()
                         .claim("authorities", authorities)
@@ -179,7 +188,10 @@ public class AuthorizationServerConfig {
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        return new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(UUID.randomUUID().toString()).build();
+        return new RSAKey.Builder(publicKey)
+                .privateKey(privateKey)
+                .keyID(UUID.randomUUID().toString())
+                .build();
     }
 
     private static KeyPair generateRsaKey() {
