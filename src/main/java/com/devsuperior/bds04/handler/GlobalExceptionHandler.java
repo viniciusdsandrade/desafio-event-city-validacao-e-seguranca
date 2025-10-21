@@ -26,19 +26,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<List<ErrorDetails>> handleBadRequestException(
-            BadRequestException exception, WebRequest webRequest) {
+            BadRequestException exception,
+            WebRequest webRequest
+    ) {
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "BAD_REQUEST");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "BAD_REQUEST"
+        );
         return new ResponseEntity<>(List.of(errorDetails), BAD_REQUEST);
     }
 
-    // ⬇️ ALTERADO AQUI
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @Schema(description = "Manipula erros de validação e retorna 422 com a lista de campos inválidos.")
-    public ResponseEntity<Map<String, Object>> handleValidationException(
-            MethodArgumentNotValidException exception, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException exception) {
 
         List<Map<String, String>> items = new ArrayList<>();
+
         for (FieldError error : exception.getBindingResult().getFieldErrors()) {
             Map<String, String> item = new HashMap<>();
             item.put("fieldName", error.getField());
@@ -54,41 +59,76 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<List<ErrorDetails>> handleIllegalArgumentException(
-            IllegalArgumentException exception, WebRequest webRequest) {
+            IllegalArgumentException exception,
+            WebRequest webRequest
+    ) {
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "INVALID_ARGUMENT");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "INVALID_ARGUMENT"
+        );
+
         return new ResponseEntity<>(List.of(errorDetails), BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<List<ErrorDetails>> handleEntityNotFoundException(
-            EntityNotFoundException exception, WebRequest webRequest) {
+            EntityNotFoundException exception,
+            WebRequest webRequest
+    ) {
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "RESOURCE_NOT_FOUND");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "RESOURCE_NOT_FOUND"
+        );
+
         return new ResponseEntity<>(List.of(errorDetails), NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<List<ErrorDetails>> handleUnsupportedMediaTypeException(
-            HttpMediaTypeNotSupportedException exception, WebRequest webRequest) {
+            HttpMediaTypeNotSupportedException exception,
+            WebRequest webRequest
+    ) {
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "UNSUPPORTED_MEDIA_TYPE");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "UNSUPPORTED_MEDIA_TYPE"
+        );
+
         return new ResponseEntity<>(List.of(errorDetails), UNSUPPORTED_MEDIA_TYPE);
     }
 
     @ExceptionHandler(InternalServerError.class)
     public ResponseEntity<List<ErrorDetails>> handleGlobalException(
-            Exception exception, WebRequest webRequest) {
+            Exception exception,
+            WebRequest webRequest
+    ) {
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "INTERNAL_SERVER_ERROR");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "INTERNAL_SERVER_ERROR"
+        );
         return new ResponseEntity<>(List.of(errorDetails), INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public ResponseEntity<List<ErrorDetails>> handleNotImplementedException(
-            UnsupportedOperationException exception, WebRequest webRequest) {
+            UnsupportedOperationException exception,
+            WebRequest webRequest
+    ) {
+
         ErrorDetails errorDetails = new ErrorDetails(
-                now(), exception.getMessage(), webRequest.getDescription(false), "NOT_IMPLEMENTED");
+                now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "NOT_IMPLEMENTED"
+        );
+
         return new ResponseEntity<>(List.of(errorDetails), NOT_IMPLEMENTED);
     }
 }
